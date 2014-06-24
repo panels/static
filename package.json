@@ -1,0 +1,29 @@
+{
+  "name": "panel-static",
+  "version": "0.0.1",
+  "description": "Extending express.static to compile CoffeeScript with Browserify to Javascript and LESS to CSS",
+  "main": "lib/main.js",
+  "scripts": {
+    "prepublish": "./node_modules/.bin/coffee -o lib/ src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panels/static"
+  },
+  "bugs": {
+    "url": "https://github.com/panels/static/issues"
+  },
+  "author": "Marek Hrabe <marekhrabe@abdoc.net> (https://github.com/marekhrabe)",
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "^1.7.1"
+  },
+  "dependencies": {
+    "browserify-middleware": "^3.0.0",
+    "coffee-script": "^1.7.1",
+    "coffeeify": "^0.6.0",
+    "connect-static-transform": "^0.7.0",
+    "less": "^1.7.3",
+    "serve-static": "^1.2.3"
+  }
+}
