@@ -22,7 +22,6 @@
     "browserify-middleware": "^3.0.0",
     "coffee-script": "^1.7.1",
     "coffeeify": "^0.6.0",
-    "connect-static-transform": "^0.7.0",
     "less": "^1.7.3",
     "serve-static": "^1.2.3"
   }
