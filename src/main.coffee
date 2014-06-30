@@ -13,16 +13,28 @@ module.exports = (dir) ->
   lessMiddleware = (req, res, next) ->
     if req.path.indexOf('.less') != -1
       urlPath = req.path.substr(1)
+      filepath = path.resolve(dir, urlPath)
 
-      fs.readFile path.resolve(dir, urlPath), 'utf-8', (err, file) ->
+      fs.readFile filepath, 'utf-8', (err, file) ->
         if err
           next()
         else
           unless req.query.nolesshat?
-            file = lesshat + file
+            file = file + lesshat
 
-          less.render file, (err, css) ->
+          parser = new less.Parser
+            paths: [path.dirname filepath]
+            filename: path.basename filepath
+
+          parser.parse file, (err, tree) ->
             if err
+              console.log err
+              return next()
+
+            try
+              css = tree && tree.toCSS && tree.toCSS()
+            catch err
+              console.log err
               return next()
 
             res.header 'Content-Type', 'text/css'
