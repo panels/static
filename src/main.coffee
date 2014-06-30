@@ -9,6 +9,7 @@ fs = require 'fs'
 module.exports = (dir) ->
   dir = path.resolve dir
 
+  lesshat = fs.readFileSync require.resolve 'lesshat/build/lesshat.less'
   lessMiddleware = (req, res, next) ->
     if req.path.indexOf('.less') != -1
       urlPath = req.path.substr(1)
@@ -17,6 +18,9 @@ module.exports = (dir) ->
         if err
           next()
         else
+          unless req.query.nolesshat?
+            file = lesshat + file
+
           less.render file, (err, css) ->
             if err
               return next()
@@ -45,20 +49,23 @@ module.exports = (dir) ->
   staticMiddleware = serveStatic(dir)
 
   (req, res, next) ->
+    fallback = ->
+      staticMiddleware(req, res, next)
+
     dotSplitted = req.path.split('.')
     if dotSplitted.length > 1 and not req.query.raw?
       extension = dotSplitted[dotSplitted.length - 1]
 
       if extension is 'coffee'
         unless req.query.nobrowserify?
-          return browserifyAndCoffeeMiddleware(req, res, next)
+          return browserifyAndCoffeeMiddleware(req, res, fallback)
         unless req.query.nocoffee?
-          return coffeeMiddleware(req, res, next)
+          return coffeeMiddleware(req, res, fallback)
 
       if extension is 'js' and not req.query.nobrowserify?
-        return browserifyAndCoffeeMiddleware(req, res, next)
+        return browserifyAndCoffeeMiddleware(req, res, fallback)
 
       if extension is 'less' and not req.query.noless?
-        return lessMiddleware(req, res, next)
+        return lessMiddleware(req, res, fallback)
 
-    staticMiddleware(req, res, next)
+    fallback()

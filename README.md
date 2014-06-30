@@ -1,6 +1,6 @@
 # Panel Static
 
-Extending express.static to compile CoffeeScript with Browserify to Javascript and LESS to CSS
+Extending express.static to compile [CoffeeScript](http://coffeescript.org/) with [Browserify](http://browserify.org/) to Javascript and LESS (with [LESS Hat](https://lesshat.com) library automaticaly included) to CSS
 
 # Before you use
 
@@ -34,13 +34,14 @@ You can manually force request to just serve static file by adding `raw` param t
 
 ### For `.js` files
 
-- nobrowserify to get raw js file
+- `nobrowserify` to get raw js file
 
 ### For `.coffee` files (you can use both together)
 
-- nobrowserify to just compile Coffee Script and skip browserify
-- nobrowserify & nocoffee to get raw coffee file
+- `nobrowserify` to just compile Coffee Script and skip browserify
+- `nobrowserify` & `nocoffee` to get raw coffee file
 
 ### For `.less` files
 
-- noless to get raw less file
+- `noless` to get raw less file
+- `nolesshat` to not include LESS Hat
