@@ -2,7 +2,6 @@ serveStatic = require 'serve-static'
 browserify = require 'browserify-middleware'
 coffee = require 'coffee-script'
 less = require 'less'
-coffeeify = require 'coffeeify'
 path = require 'path'
 fs = require 'fs'
 
@@ -57,7 +56,7 @@ module.exports = (dir) ->
   browserifyAndCoffeeMiddleware = browserify(dir,
     grep: /.(coffee|js)/i
     extensions: ['.coffee', '.js']
-    transform: ['coffeeify']
+    transform: ['coffeeify', 'envify']
   )
   staticMiddleware = serveStatic(dir)
 
