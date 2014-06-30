@@ -56,12 +56,15 @@ module.exports = (dir) ->
 
   browserifyAndCoffeeMiddleware = browserify(dir,
     grep: /.(coffee|js)/i
+    extensions: ['.coffee', '.js']
     transform: ['coffeeify']
   )
   staticMiddleware = serveStatic(dir)
 
   (req, res, next) ->
-    fallback = ->
+    fallback = (err) ->
+      if err
+        console.log err
       staticMiddleware(req, res, next)
 
     dotSplitted = req.path.split('.')
@@ -80,4 +83,4 @@ module.exports = (dir) ->
       if extension is 'less' and not req.query.noless?
         return lessMiddleware(req, res, fallback)
 
-    fallback()
+    fallback(null)
