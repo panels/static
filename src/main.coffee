@@ -5,6 +5,9 @@ less = require 'less'
 path = require 'path'
 fs = require 'fs'
 
+beep = ->
+  process.stdout.write '\x07'
+
 module.exports = (dir) ->
   dir = path.resolve dir
 
@@ -27,12 +30,14 @@ module.exports = (dir) ->
 
           parser.parse file, (err, tree) ->
             if err
+              beep()
               console.log err
               return next()
 
             try
               css = tree && tree.toCSS && tree.toCSS()
             catch err
+              beep()
               console.log err
               return next()
 
@@ -40,6 +45,7 @@ module.exports = (dir) ->
             res.send css
     else
       next()
+
   coffeeMiddleware = (req, res, next) ->
     if req.path.indexOf('.coffee') != -1
       urlPath = req.path.substr(1)
@@ -63,6 +69,7 @@ module.exports = (dir) ->
   (req, res, next) ->
     fallback = (err) ->
       if err
+        beep()
         console.log err
       staticMiddleware(req, res, next)
 
