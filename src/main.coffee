@@ -5,6 +5,8 @@ less = require 'less'
 path = require 'path'
 fs = require 'fs'
 
+errorClientLib = fs.readFileSync require.resolve 'panel-error'
+
 beep = ->
   process.stdout.write '\x07'
 
@@ -19,7 +21,7 @@ module.exports = (dir) ->
 
       fs.readFile filepath, 'utf-8', (err, file) ->
         if err
-          next()
+          next(err)
         else
           unless req.query.nolesshat?
             file = file + lesshat
@@ -30,16 +32,12 @@ module.exports = (dir) ->
 
           parser.parse file, (err, tree) ->
             if err
-              beep()
-              console.log err
-              return next()
+              return next(err)
 
             try
               css = tree && tree.toCSS && tree.toCSS()
             catch err
-              beep()
-              console.log err
-              return next()
+              return next(err)
 
             res.header 'Content-Type', 'text/css'
             res.send css
@@ -52,12 +50,19 @@ module.exports = (dir) ->
 
       fs.readFile path.resolve(dir, urlPath), 'utf-8', (err, file) ->
         if err
-          next()
+          next(err)
         else
           res.header 'Content-Type', 'application/javascript'
           res.send(coffee.compile(file))
     else
       next()
+
+  jsErrorMiddleware = (req, res, next) ->
+    output = "window._panelErrors = window._panelErrors || [];window._panelErrors.push('[compilation-error] '+#{JSON.stringify(req._panelError.message)});"
+    output += errorClientLib
+
+    res.header 'Content-Type', 'application/javascript'
+    res.send(output)
 
   browserifyAndCoffeeMiddleware = browserify(dir,
     grep: /.(coffee|js)/i
@@ -70,7 +75,15 @@ module.exports = (dir) ->
     fallback = (err) ->
       if err
         beep()
-        console.log err
+        console.error ""
+        console.error err
+        console.error ""
+        req._panelError = err
+
+        if extension in ['js', 'coffee']
+          jsErrorMiddleware(req, res, next)
+          return
+
       staticMiddleware(req, res, next)
 
     dotSplitted = req.path.split('.')

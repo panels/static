@@ -25,6 +25,7 @@
     "envify": "^2.0.0",
     "less": "^1.7.3",
     "lesshat": "^3.0.2",
+    "panel-error": "^1.0.0",
     "serve-static": "^1.2.3"
   }
 }
