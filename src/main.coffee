@@ -58,7 +58,7 @@ module.exports = (dir) ->
       next()
 
   jsErrorMiddleware = (req, res, next) ->
-    output = "window._panelErrors = window._panelErrors || [];window._panelErrors.push('[compilation-error] '+#{JSON.stringify(req._panelError.message)});"
+    output = "window._panelErrors = window._panelErrors || [];window._panelErrors.push(#{JSON.stringify(req._panelError.message)});"
     output += errorClientLib
 
     res.header 'Content-Type', 'application/javascript'
