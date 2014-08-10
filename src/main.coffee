@@ -1,7 +1,7 @@
 serveStatic = require 'serve-static'
 browserify = require 'browserify-middleware'
 coffee = require 'coffee-script'
-less = require 'less'
+less = require 'less-minimal'
 path = require 'path'
 fs = require 'fs'
 
