@@ -68,6 +68,9 @@ module.exports = (dir) ->
     grep: /.(coffee|js)/i
     extensions: ['.coffee', '.js']
     transform: ['coffeeify', 'envify']
+    insertGlobals: true
+    detectGlobals: false
+    debug: process.env.NODE_ENV isnt 'production'
   )
   staticMiddleware = serveStatic(dir)
 
