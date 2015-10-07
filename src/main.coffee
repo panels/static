@@ -1,5 +1,7 @@
 serveStatic = require 'serve-static'
 browserify = require 'browserify-middleware'
+autoprefixer = require 'autoprefixer'
+postcss = require 'postcss'
 coffee = require 'coffee-script'
 less = require 'less-minimal'
 path = require 'path'
@@ -40,7 +42,12 @@ module.exports = (dir) ->
               return next(err)
 
             res.header 'Content-Type', 'text/css'
-            res.send css
+            if req.query.autoprefixer?
+              postcss([ autoprefixer ]).process(css).then (result) ->
+                result.warnings().forEach (warn) -> console.warn(warn.toString())
+                res.send result.css
+            else
+              res.send css
     else
       next()
 

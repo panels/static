@@ -19,6 +19,7 @@
     "coffee-script": "^1.7.1"
   },
   "dependencies": {
+    "autoprefixer": "^5.2.0",
     "browserify-middleware": "^7.0.0",
     "coffee-script": "^1.9.3",
     "coffeeify": "^1.1.0",
@@ -26,6 +27,7 @@
     "less-minimal": "^1.7.4",
     "lesshat": "^3.0.2",
     "panel-error": "^1.0.0",
+    "postcss": "^4.1.16",
     "serve-static": "^1.2.3"
   }
 }
