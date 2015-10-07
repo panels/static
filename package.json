@@ -1,6 +1,6 @@
 {
   "name": "panel-static",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Extending express.static to compile CoffeeScript with Browserify to Javascript and LESS to CSS",
   "main": "lib/main.js",
   "scripts": {
